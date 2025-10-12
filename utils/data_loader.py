@@ -4,6 +4,7 @@ Datenlade- und Verarbeitungsfunktionen
 
 import streamlit as st
 import pandas as pd
+import json
 
 
 @st.cache_data
@@ -90,3 +91,41 @@ def create_ranking_table(df):
     ranking["Medaille"] = ranking["Rang"].map(lambda x: medals.get(x, ""))
 
     return ranking[["Rang", "Medaille", "Name", "Anzahl Kisten"]]
+
+
+@st.cache_data
+def load_kader():
+    """
+    Lädt die Kader-Liste aus kader.json.
+    Kombiniert Vor- und Nachname zu Vollname für Vergleich mit Excel.
+    """
+    try:
+        with open("kader.json", "r", encoding="utf-8") as f:
+            kader_data = json.load(f)
+
+        # Vollname erstellen für jeden Spieler
+        for spieler in kader_data:
+            spieler["vollname"] = f"{spieler['vorname']} {spieler['nachname']}"
+
+        return kader_data
+    except Exception as e:
+        st.error(f"❌ Fehler beim Laden der Kader-Datei: {e}")
+        return []
+
+
+def check_kader_consistency(kader_data, df):
+    """
+    Prüft Konsistenz zwischen Kader-JSON und Excel-Daten.
+    Gibt Warnungen aus wenn jemand fehlt.
+    """
+    kader_namen = {s["vollname"] for s in kader_data}
+    excel_namen = set(df["Name"].unique()) - {"geteilte kisten"}
+
+    # Spieler in Excel aber nicht im Kader
+    nicht_im_kader = excel_namen - kader_namen
+    if nicht_im_kader:
+        st.warning(
+            f"⚠️ Diese Namen sind in der Kistenliste aber nicht im Kader: {', '.join(nicht_im_kader)}"
+        )
+
+    return nicht_im_kader

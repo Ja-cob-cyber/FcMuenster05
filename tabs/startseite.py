@@ -4,7 +4,7 @@ Startseite Tab - Übersicht und Mannschaftskader
 
 import streamlit as st
 from datetime import datetime
-from utils.data_loader import load_data
+from utils.data_loader import load_data, load_kader, check_kader_consistency
 
 
 def render():
@@ -83,34 +83,42 @@ def render():
     st.markdown("### 👥 Mannschaftskader")
 
     if df_kisten is not None:
-        # Kader aus Kistenliste extrahieren (alle einzigartigen Namen, außer "geteilte kisten")
-        kader_namen = sorted(
-            [
-                name
-                for name in df_kisten["Name"].unique()
-                if name.lower() != "geteilte kisten"
-            ]
-        )
+        # Kader aus JSON laden
+        kader_data = load_kader()
 
-        st.info(f"📋 **{len(kader_namen)} Spieler** im Kader")
+        # Konsistenz-Check
+        if df_kisten is not None:
+            check_kader_consistency(kader_data, df_kisten)
 
-        # In 4 Spalten anzeigen
+        st.info(f"📋 **{len(kader_data)} Personen** im Kader (inkl. Trainer)")
+
         cols = st.columns(4)
-        for idx, name in enumerate(kader_namen):
+        for idx, spieler in enumerate(kader_data):
             with cols[idx % 4]:
-                # Prüfe ob Spieler offene Kisten hat
-                offene = len(
-                    df_kisten[
-                        (df_kisten["Name"] == name)
-                        & (df_kisten["Bezahlt_Status"] == "Offen")
-                    ]
-                )
-                if offene > 0:
-                    st.markdown(f"⚠️ **{name}** ({offene} offen)")
+                name = spieler["vollname"]
+                nummer = spieler["nummer"]
+                position = spieler.get("position", "")
+
+                # Offene Kisten für diesen Spieler
+                if df_kisten is not None:
+                    offene = len(
+                        df_kisten[
+                            (df_kisten["Name"] == name)
+                            & (df_kisten["Bezahlt_Status"] == "Offen")
+                        ]
+                    )
                 else:
-                    st.markdown(f"✅ **{name}**")
-    else:
-        st.info("Kader konnte nicht geladen werden.")
+                    offene = 0
+
+                # Anzeige
+                if offene > 0:
+                    st.markdown(f"⚠️ **#{nummer} {name}**")
+                    st.caption(
+                        f"{position} • {offene} Kiste{'n' if offene != 1 else ''} offen"
+                    )
+                else:
+                    st.markdown(f"✅ **#{nummer} {name}**")
+                    st.caption(f"{position}")
 
     st.markdown("---")
 
