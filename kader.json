@@ -1,32 +1,170 @@
 [
-    { "nummer": 1, "vorname": "Finn", "nachname": "Bartels", "Position": "Abwehr" },
-    { "nummer": 2, "vorname": "Leonard", "nachname": "Codero", "Position": "Abwehr" },
-    { "nummer": 3, "vorname": "Nicolas", "nachname": "Depenbrock", "Position": "Stürmer" },
-    { "nummer": 4, "vorname": "Till", "nachname": "Dexel", "Position": "Abwehr" },
-    { "nummer": 5, "vorname": "Leo", "nachname": "Fenner", "Position": "Abwehr" },
-    { "nummer": 6, "vorname": "Sven", "nachname": "Hempen", "Position": "Mittelfeld" },
-    { "nummer": 7, "vorname": "Ole", "nachname": "Johenneken", "Position": "Abwehr" },
-    { "nummer": 8, "vorname": "Marcel", "nachname": "Klusak", "Position": "Abwehr" },
-    { "nummer": 9, "vorname": "Maxi", "nachname": "Köhne", "Position": "Torwart" },
-    { "nummer": 10, "vorname": "Timon", "nachname": "Krolop", "Position": "Abwehr" },
-    { "nummer": 11, "vorname": "Jacob", "nachname": "Kunde", "Position": "Stürmer" },
-    { "nummer": 12, "vorname": "Pascal", "nachname": "Lange", "Position": "Mittelfeld" },
-    { "nummer": 13, "vorname": "Jens", "nachname": "Menke", "Position": "Mittelfeld" },
-    { "nummer": 14, "vorname": "Julius", "nachname": "Mette", "Position": "Abwehr" },
-    { "nummer": 15, "vorname": "Henning", "nachname": "Meyer", "Position": "Abwehr" },
-    { "nummer": 16, "vorname": "Marco", "nachname": "Moya", "Position": "Abwehr" },
-    { "nummer": 17, "vorname": "Henri", "nachname": "Rosenstock", "Position": "Verein verlassen" },
-    { "nummer": 18, "vorname": "Thies", "nachname": "Schäper", "Position": "Mittelfeld" },
-    { "nummer": 19, "vorname": "Ilias", "nachname": "Schepker", "Position": "Mittelfeld" },
-    { "nummer": 20, "vorname": "Nik", "nachname": "Schlotmann", "Position": "Mittelfeld" },
-    { "nummer": 21, "vorname": "Paul", "nachname": "Stamm", "Position": "Mittelfeld" },
-    { "nummer": 22, "vorname": "Henning", "nachname": "Stemmer", "Position": "Trainer" },
-    { "nummer": 23, "vorname": "Thorben", "nachname": "Stoklas", "Position": "Abwehr" },
-    { "nummer": 24, "vorname": "Matthis", "nachname": "Strunk", "Position": "Abwehr" },
-    { "nummer": 25, "vorname": "Nico", "nachname": "Stuhldreier", "Position": "Trainer" },
-    { "nummer": 26, "vorname": "Lucas", "nachname": "Tannert", "Position": "Mittelfeld" },
-    { "nummer": 27, "vorname": "Johannes", "nachname": "von Bülow", "Position": "Stürmer" },
-    { "nummer": 28, "vorname": "Robin", "nachname": "Wenning", "Position": "Mittelfeld" },
-    { "nummer": 29, "vorname": "Nils", "nachname": "Wesselborg", "Position": "Mittelfeld" },
-    { "nummer": 30, "vorname": "Till", "nachname": "Wesselborg", "Position": "Abwehr" }
+    {
+        "nummer": 1,
+        "vorname": "Maxi",
+        "nachname": "Köhne",
+        "position": "Torwart"
+    },
+    {
+        "nummer": 2,
+        "vorname": "Marcel",
+        "nachname": "Klusak",
+        "position": "Abwehr"
+    },
+    {
+        "nummer": 3,
+        "vorname": "Henning",
+        "nachname": "Meyer",
+        "position": "Abwehr"
+    },
+    {
+        "nummer": 4,
+        "vorname": "Thorben",
+        "nachname": "Stoklas",
+        "position": "Abwehr"
+    },
+    {
+        "nummer": 5,
+        "vorname": "Marco",
+        "nachname": "Moya",
+        "position": "Abwehr"
+    },
+    {
+        "nummer": 6,
+        "vorname": "Julius",
+        "nachname": "Mette",
+        "position": "Abwehr"
+    },
+    {
+        "nummer": 7,
+        "vorname": "Pascal",
+        "nachname": "Lange",
+        "position": "Mittelfeld"
+    },
+    {
+        "nummer": 8,
+        "vorname": "Jens",
+        "nachname": "Menke",
+        "position": "Mittelfeld"
+    },
+    {
+        "nummer": 9,
+        "vorname": "Jacob",
+        "nachname": "Kunde",
+        "position": "Stürmer"
+    },
+    {
+        "nummer": 10,
+        "vorname": "Robin",
+        "nachname": "Wenning",
+        "position": "Mittelfeld"
+    },
+    {
+        "nummer": 11,
+        "vorname": "Nik",
+        "nachname": "Schlotmann",
+        "position": "Mittelfeld"
+    },
+    {
+        "nummer": 12,
+        "vorname": "Finn",
+        "nachname": "Bartels",
+        "position": "Abwehr"
+    },
+    {
+        "nummer": 13,
+        "vorname": "Leonard",
+        "nachname": "Codero",
+        "position": "Abwehr"
+    },
+    {
+        "nummer": 14,
+        "vorname": "Nicolas",
+        "nachname": "Depenbrock",
+        "position": "Stürmer"
+    },
+    {
+        "nummer": 15,
+        "vorname": "Till",
+        "nachname": "Dexel",
+        "position": "Abwehr"
+    },
+    {
+        "nummer": 16,
+        "vorname": "Leo",
+        "nachname": "Fenner",
+        "position": "Abwehr"
+    },
+    {
+        "nummer": 17,
+        "vorname": "Sven",
+        "nachname": "Hempen",
+        "position": "Mittelfeld"
+    },
+    {
+        "nummer": 18,
+        "vorname": "Ole",
+        "nachname": "Johenneken",
+        "position": "Abwehr"
+    },
+    {
+        "nummer": 20,
+        "vorname": "Thies",
+        "nachname": "Schäper",
+        "position": "Mittelfeld"
+    },
+    {
+        "nummer": 21,
+        "vorname": "Ilias",
+        "nachname": "Schepker",
+        "position": "Mittelfeld"
+    },
+    {
+        "nummer": 22,
+        "vorname": "Paul",
+        "nachname": "Stamm",
+        "position": "Mittelfeld"
+    },
+    {
+        "nummer": 23,
+        "vorname": "Henning",
+        "nachname": "Stemmer",
+        "position": "Co-Trainer "
+    },
+    {
+        "nummer": 24,
+        "vorname": "Matthis",
+        "nachname": "Strunk",
+        "position": "Abwehr"
+    },
+    {
+        "nummer": 25,
+        "vorname": "Nico",
+        "nachname": "Stuhldreier",
+        "position": "Trainer"
+    },
+    {
+        "nummer": 26,
+        "vorname": "Lucas",
+        "nachname": "Tannert",
+        "position": "Mittelfeld"
+    },
+    {
+        "nummer": 27,
+        "vorname": "Johannes",
+        "nachname": "von Bülow",
+        "position": "Stürmer"
+    },
+    {
+        "nummer": 28,
+        "vorname": "Nils",
+        "nachname": "Wesselborg",
+        "position": "Mittelfeld"
+    },
+    {
+        "nummer": 29,
+        "vorname": "Till",
+        "nachname": "Wesselborg",
+        "position": "Abwehr"
+    }
 ]

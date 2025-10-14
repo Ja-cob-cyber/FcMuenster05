@@ -93,39 +93,122 @@ def create_ranking_table(df):
     return ranking[["Rang", "Medaille", "Name", "Anzahl Kisten"]]
 
 
-@st.cache_data
+st.cache_data
+
+
 def load_kader():
     """
-    Lädt die Kader-Liste aus kader.json.
-    Kombiniert Vor- und Nachname zu Vollname für Vergleich mit Excel.
+    Lädt den Kader aus kader.json.
     """
     try:
         with open("kader.json", "r", encoding="utf-8") as f:
-            kader_data = json.load(f)
+            kader = json.load(f)
 
-        # Vollname erstellen für jeden Spieler
-        for spieler in kader_data:
-            spieler["vollname"] = f"{spieler['vorname']} {spieler['nachname']}"
-
-        return kader_data
+        # Als DataFrame zurückgeben
+        df = pd.DataFrame(kader)
+        return df
     except Exception as e:
-        st.error(f"❌ Fehler beim Laden der Kader-Datei: {e}")
-        return []
+        st.error(f"❌ Fehler beim Laden des Kaders: {e}")
+        return pd.DataFrame()
 
 
-def check_kader_consistency(kader_data, df):
+@st.cache_data
+def load_strafenkatalog():
     """
-    Prüft Konsistenz zwischen Kader-JSON und Excel-Daten.
-    Gibt Warnungen aus wenn jemand fehlt.
+    Lädt den Strafenkatalog aus strafenkatalog.json als DataFrame.
     """
-    kader_namen = {s["vollname"] for s in kader_data}
-    excel_namen = set(df["Name"].unique()) - {"geteilte kisten"}
+    try:
+        with open("strafenkatalog.json", "r", encoding="utf-8") as f:
+            strafen = json.load(f)
 
-    # Spieler in Excel aber nicht im Kader
-    nicht_im_kader = excel_namen - kader_namen
-    if nicht_im_kader:
-        st.warning(
-            f"⚠️ Diese Namen sind in der Kistenliste aber nicht im Kader: {', '.join(nicht_im_kader)}"
+        # Als DataFrame zurückgeben
+        df = pd.DataFrame(strafen)
+        return df
+    except Exception as e:
+        st.error(f"❌ Fehler beim Laden des Strafenkatalogs: {e}")
+        return pd.DataFrame()
+
+
+@st.cache_data
+def load_strafen_excel():
+    """
+    Lädt die aktuellen Strafen aus Strafenkatalog.xlsx.
+    Bereinigt die Daten und berechnet Bezahlt-Status.
+    """
+    try:
+        df = pd.read_excel("Strafenkatalog.xlsx", sheet_name="Tabelle1")
+
+        # Spalten umbenennen (Leerzeichen entfernen)
+        df.columns = df.columns.str.strip()
+
+        # Termin zu Datum konvertieren
+        df["Termin"] = pd.to_datetime(df["Termin"], errors="coerce")
+
+        # Namen bereinigen
+        df["Wer?"] = df["Wer?"].str.strip()
+
+        # Bezahlt-Status: NaN = Offen, 1 = Bezahlt
+        df["Bezahlt_Status"] = df["Bezahlt?"].apply(
+            lambda x: "Bezahlt" if x == 1 else "Offen"
         )
 
-    return nicht_im_kader
+        # "Wie viel?" bereinigen
+        df["Betrag"] = df["Wie viel?"].fillna(0)
+
+        # Sortieren nach Datum (neueste zuerst)
+        df = df.sort_values("Termin", ascending=False)
+
+        return df
+    except Exception as e:
+        st.error(f"❌ Fehler beim Laden der Strafen: {e}")
+        return None
+
+
+def calculate_strafen_per_person(df):
+    """
+    Berechnet offene Strafen pro Person.
+    """
+    if df is None or df.empty:
+        return pd.DataFrame()
+
+    # Nur offene Strafen
+    open_df = df[df["Bezahlt_Status"] == "Offen"].copy()
+
+    # Gruppieren nach Person
+    strafen_summary = (
+        open_df.groupby("Wer?").agg({"Betrag": "sum", "Was?": "count"}).reset_index()
+    )
+
+    strafen_summary.columns = ["Name", "Offener Betrag (€)", "Anzahl Strafen"]
+    strafen_summary = strafen_summary.sort_values("Offener Betrag (€)", ascending=False)
+
+    return strafen_summary
+
+
+def get_strafen_stats(df):
+    """
+    Berechnet Statistiken über alle Strafen.
+    """
+    if df is None or df.empty:
+        return {
+            "gesamt": 0,
+            "offen": 0,
+            "bezahlt": 0,
+            "betrag_offen": 0,
+            "betrag_bezahlt": 0,
+        }
+
+    gesamt = len(df)
+    offen = len(df[df["Bezahlt_Status"] == "Offen"])
+    bezahlt = len(df[df["Bezahlt_Status"] == "Bezahlt"])
+
+    betrag_offen = df[df["Bezahlt_Status"] == "Offen"]["Betrag"].sum()
+    betrag_bezahlt = df[df["Bezahlt_Status"] == "Bezahlt"]["Betrag"].sum()
+
+    return {
+        "gesamt": gesamt,
+        "offen": offen,
+        "bezahlt": bezahlt,
+        "betrag_offen": betrag_offen,
+        "betrag_bezahlt": betrag_bezahlt,
+    }
